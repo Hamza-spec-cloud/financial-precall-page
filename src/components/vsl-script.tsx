@@ -1,9 +1,10 @@
 // Long-form script renderer. Maps the structured Block[] in src/content/vsl-script.ts
-// onto the Arysn typography scale — h2/h3 read at full headline weight per user direction
-// ("subheadlines must look like proper headlines"). Inline tokens carry .text-burgundy
-// italic and #e0e0e0 strong emphasis from the data layer.
+// onto an enlarged typography scale tuned for a calm, hypnotic downward read — body 18/20px,
+// section h2 28/36/44px, with four distinct vertical-spacing tiers (br phrase-jump < idea gap <
+// headline approach < section rule). Inline tokens carry .text-burgundy italic and #e0e0e0
+// strong emphasis from the data layer.
 
-import Image from "next/image";
+import { SmartImage } from "@/components/smart-image";
 import { ScriptVignette } from "@/components/script-vignette";
 import { VSL_SCRIPT, type Block, type Inline } from "@/content/vsl-script";
 
@@ -18,7 +19,7 @@ function renderInline(content: Inline[], baseKey: string) {
       );
     }
     return (
-      <span key={`${baseKey}-${i}`} className="text-[#e0e0e0] font-medium">
+      <span key={`${baseKey}-${i}`} className="text-[#e0e0e0] font-semibold">
         {node.s}
       </span>
     );
@@ -33,7 +34,7 @@ function renderBlock(block: Block, i: number) {
       return (
         <h2
           key={key}
-          className="text-[22px] md:text-[27px] lg:text-[33px] font-semibold tracking-tight text-[#e0e0e0] leading-[1.15] mt-[58px] mb-[22px]"
+          className="text-[28px] md:text-[36px] lg:text-[44px] font-semibold tracking-[-0.025em] text-[#e0e0e0] leading-[1.12] mt-[72px] md:mt-[88px] mb-[24px] md:mb-[28px]"
         >
           {renderInline(block.content, key)}
         </h2>
@@ -43,7 +44,7 @@ function renderBlock(block: Block, i: number) {
       return (
         <h3
           key={key}
-          className="text-[18px] md:text-[22px] font-medium tracking-tight text-[#e0e0e0] leading-[1.2] mt-[44px] mb-[15px]"
+          className="text-[21px] md:text-[26px] font-medium tracking-[-0.02em] text-[#e0e0e0] leading-[1.25] mt-[52px] md:mt-[60px] mb-[16px] md:mb-[20px]"
         >
           {renderInline(block.content, key)}
         </h3>
@@ -53,7 +54,7 @@ function renderBlock(block: Block, i: number) {
       return (
         <p
           key={key}
-          className="text-[15px] md:text-[16px] text-[#aaaaaa] leading-relaxed mb-[22px]"
+          className="text-[18px] md:text-[20px] text-[#aaaaaa] leading-[1.7] mb-[32px] md:mb-[40px]"
         >
           {renderInline(block.content, key)}
         </p>
@@ -61,11 +62,11 @@ function renderBlock(block: Block, i: number) {
 
     case "ul":
       return (
-        <ul key={key} className="space-y-[11px] mb-[22px] list-none pl-0">
+        <ul key={key} className="space-y-[16px] mb-[32px] md:mb-[40px] list-none pl-0">
           {block.items.map((item, j) => (
             <li
               key={`${key}-${j}`}
-              className="text-[15px] md:text-[16px] text-[#aaaaaa] leading-relaxed flex gap-[11px]"
+              className="text-[18px] md:text-[20px] text-[#aaaaaa] leading-[1.7] flex gap-[14px]"
             >
               <span className="text-[#555555] shrink-0 select-none" aria-hidden="true">
                 &ndash;
@@ -78,11 +79,11 @@ function renderBlock(block: Block, i: number) {
 
     case "ol":
       return (
-        <ol key={key} className="space-y-[11px] mb-[22px] list-none pl-0 counter-reset-list">
+        <ol key={key} className="space-y-[16px] mb-[32px] md:mb-[40px] list-none pl-0 counter-reset-list">
           {block.items.map((item, j) => (
             <li
               key={`${key}-${j}`}
-              className="text-[15px] md:text-[16px] text-[#aaaaaa] leading-relaxed flex gap-[11px]"
+              className="text-[18px] md:text-[20px] text-[#aaaaaa] leading-[1.7] flex gap-[14px]"
             >
               <span className="text-[#555555] shrink-0 select-none tabular-nums" aria-hidden="true">
                 {String(j + 1).padStart(2, "0")}
@@ -97,7 +98,7 @@ function renderBlock(block: Block, i: number) {
       return (
         <blockquote
           key={key}
-          className="border-l pl-[22px] italic text-[#e0e0e0] my-[29px] text-[16px] md:text-[18px] leading-relaxed"
+          className="border-l pl-[24px] italic text-[#e0e0e0] my-[40px] text-[20px] md:text-[24px] leading-[1.6]"
           style={{ borderColor: "rgba(184,54,90,0.40)" }}
         >
           {renderInline(block.content, key)}
@@ -109,7 +110,7 @@ function renderBlock(block: Block, i: number) {
         <div
           key={key}
           aria-hidden="true"
-          className="my-[58px]"
+          className="my-[72px] md:my-[96px]"
           style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
         />
       );
@@ -119,7 +120,7 @@ function renderBlock(block: Block, i: number) {
         <a
           key={key}
           href="#book"
-          className="inline-block text-[#FFBF00] text-[12px] font-medium tracking-[0.20em] uppercase border-b border-[#FFBF00]/40 pb-[1px] hover:border-[#FFBF00] mb-[22px]"
+          className="inline-block text-[#FFBF00] text-[13px] md:text-[14px] font-medium tracking-[0.20em] uppercase border-b border-[#FFBF00]/40 pb-[1px] hover:border-[#FFBF00] mb-[32px] md:mb-[40px]"
           style={{ transition: "border-color 200ms cubic-bezier(0.16,1,0.3,1)" }}
         >
           {block.text}
@@ -130,13 +131,14 @@ function renderBlock(block: Block, i: number) {
       return (
         <div
           key={key}
-          className="my-[36px] border border-white/[0.06] overflow-hidden"
+          className="my-[48px] md:my-[56px] border border-white/[0.06] overflow-hidden"
         >
-          <Image
+          <SmartImage
             src={block.src}
             alt={block.alt}
             width={block.width}
             height={block.height}
+            sizes="(max-width: 768px) 90vw, 720px"
             className="w-full h-auto"
             style={{ display: "block" }}
           />
@@ -147,7 +149,7 @@ function renderBlock(block: Block, i: number) {
 
 export function VSLScript() {
   return (
-    <section className="relative w-full px-6 py-[87px]">
+    <section className="cv-auto relative w-full px-6 py-[110px] md:py-[140px]">
       <ScriptVignette />
 
       <div

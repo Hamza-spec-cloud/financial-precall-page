@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SmartImage } from "@/components/smart-image";
 
 const LOGOS: { src: string; alt: string; width: number; height: number; maxHeight?: number }[] = [
   { src: "/marquee/10ft-studio.png",       alt: "10FT Studio",                 width: 480, height: 272 },
@@ -34,11 +34,12 @@ export function VSLMarquee() {
               className="shrink-0 flex items-center justify-center"
               style={{ height: logo.height }}
             >
-              <Image
+              <SmartImage
                 src={logo.src}
                 alt={logo.alt}
                 width={logo.width}
                 height={logo.height}
+                sizes="240px"
                 style={{
                   mixBlendMode: "screen",
                   objectFit: "contain",

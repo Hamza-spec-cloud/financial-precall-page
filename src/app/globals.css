@@ -86,6 +86,16 @@ p, li, a, blockquote, span, label, button {
   will-change: transform;
 }
 
+/* Skip layout/paint for this section while it is far offscreen — big fast-scroll
+   paint saving on tall content. `auto` in contain-intrinsic-size makes the browser
+   remember the real rendered height after first paint, so there is no scrollbar jump
+   on subsequent passes. Applied only to self-contained sections (no cross-section
+   burgundy-glow bleed) to keep the visual tapestry pixel-identical. */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1800px;
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 4px;

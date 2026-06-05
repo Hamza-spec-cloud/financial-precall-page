@@ -13,6 +13,7 @@ import FloatingParticlesBackground from "@/lib/floating-particles-background.js"
 
 export function Starfield() {
   const [opacity, setOpacity] = useState(0);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
     function update() {
@@ -24,14 +25,23 @@ export function Starfield() {
       const t = Math.max(0, Math.min(1, (window.scrollY - start) / (end - start)));
       setOpacity(t);
     }
+    function onVisibility() {
+      setHidden(document.hidden);
+    }
     update();
     window.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update);
+    document.addEventListener("visibilitychange", onVisibility);
     return () => {
       window.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, []);
+
+  // The field is fully transparent across the hero + marquee — no reason to burn a
+  // RAF loop on particle physics no one can see. Pause when invisible or backgrounded.
+  const paused = opacity === 0 || hidden;
 
   return (
     <div
@@ -57,6 +67,7 @@ export function Starfield() {
         gravityStrength={50}
         backgroundColor="transparent"
         particleColor="#e0e0e0"
+        paused={paused}
       />
     </div>
   );

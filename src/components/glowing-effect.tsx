@@ -87,18 +87,46 @@ const GlowingEffect = memo(
 
     useEffect(() => {
       if (disabled) return;
-      const handleScroll = () => handleMove();
+      const element = containerRef.current;
+      if (!element) return;
+
       const handlePointerMove = (e: PointerEvent) => handleMove(e);
-      window.addEventListener("scroll", handleScroll, { passive: true });
-      document.body.addEventListener("pointermove", handlePointerMove, {
-        passive: true,
-      });
+
+      // Only listen to the global pointer stream while this instance is on (or near)
+      // screen. With several glow borders per page, an offscreen instance reading
+      // getBoundingClientRect on every pointer move is pure forced-reflow waste.
+      // (The scroll listener was also dropped — the glow only tracks the pointer, so
+      // recomputing on scroll added N reflows per scroll tick for no visible change.)
+      let attached = false;
+      const attach = () => {
+        if (attached) return;
+        document.body.addEventListener("pointermove", handlePointerMove, {
+          passive: true,
+        });
+        attached = true;
+      };
+      const detach = () => {
+        if (!attached) return;
+        document.body.removeEventListener("pointermove", handlePointerMove);
+        attached = false;
+        element.style.setProperty("--active", "0");
+      };
+
+      const io = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) attach();
+          else detach();
+        },
+        { rootMargin: "100px" }
+      );
+      io.observe(element);
+
       return () => {
         if (animationFrameRef.current) {
           cancelAnimationFrame(animationFrameRef.current);
         }
-        window.removeEventListener("scroll", handleScroll);
-        document.body.removeEventListener("pointermove", handlePointerMove);
+        io.disconnect();
+        detach();
       };
     }, [handleMove, disabled]);
 

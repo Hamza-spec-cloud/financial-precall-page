@@ -5,7 +5,7 @@
 // renders into our container.
 
 "use client";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 type CalFn = ((...args: unknown[]) => void) & {
   loaded?: boolean;
@@ -69,35 +69,63 @@ function bootstrap() {
 }
 
 export function CalEmbed() {
+  const ref = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    bootstrap();
-    const Cal = window.Cal;
-    if (!Cal || !Cal.ns) return;
-    const ns = Cal.ns["constraint-review"];
-    if (!ns) return;
+    const el = ref.current;
+    if (!el) return;
 
-    ns("inline", {
-      elementOrSelector: "#my-cal-inline-constraint-review",
-      config: {
+    // Defer the embed.js bootstrap until the booking fold (bottom of /vsl) is near
+    // the viewport, so the third-party script never competes with initial load. The
+    // container reserves a fixed height upstream, so this causes no layout shift.
+    let done = false;
+    const init = () => {
+      if (done) return;
+      done = true;
+
+      bootstrap();
+      const Cal = window.Cal;
+      if (!Cal || !Cal.ns) return;
+      const ns = Cal.ns["constraint-review"];
+      if (!ns) return;
+
+      ns("inline", {
+        elementOrSelector: "#my-cal-inline-constraint-review",
+        config: {
+          layout: "month_view",
+          useSlotsViewOnSmallScreen: "true",
+          theme: "auto",
+        },
+        calLink: "ryan-el-ghoul-houo4g/constraint-review",
+      });
+
+      ns("ui", {
+        cssVarsPerTheme: {
+          light: { "cal-brand": "#B8365A" },
+          dark: { "cal-brand": "#B8365A" },
+        },
+        hideEventTypeDetails: false,
         layout: "month_view",
-        useSlotsViewOnSmallScreen: "true",
-        theme: "auto",
-      },
-      calLink: "ryan-el-ghoul-houo4g/constraint-review",
-    });
+      });
+    };
 
-    ns("ui", {
-      cssVarsPerTheme: {
-        light: { "cal-brand": "#B8365A" },
-        dark: { "cal-brand": "#B8365A" },
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          init();
+          io.disconnect();
+        }
       },
-      hideEventTypeDetails: false,
-      layout: "month_view",
-    });
+      { rootMargin: "600px" }
+    );
+    io.observe(el);
+
+    return () => io.disconnect();
   }, []);
 
   return (
     <div
+      ref={ref}
       id="my-cal-inline-constraint-review"
       style={{ width: "100%", height: "100%", overflow: "scroll" }}
     />

@@ -3,7 +3,7 @@
 // Severance border: rgba(255,255,255,0.06) | Divider: rgba(255,255,255,0.06)
 // Container: max-w-6xl | Font: Inter | border-radius: 0px global
 
-import Image from "next/image";
+import { SmartImage } from "@/components/smart-image";
 
 const FOOTER_LINKS = [
   { label: "Terms & Conditions", href: "#" },
@@ -22,11 +22,12 @@ export function SiteFooter() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
 
           <a href="/" className="flex items-center gap-3 no-underline">
-            <Image
+            <SmartImage
               src="/logo.png"
               alt="Arysn logo"
               width={32}
               height={32}
+              sizes="32px"
               className="shrink-0"
               style={{ mixBlendMode: "screen" }}
             />

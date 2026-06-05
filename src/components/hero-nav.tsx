@@ -12,8 +12,8 @@
 //     Do NOT "normalize" this back to burgundy — it is the sole authorized amber
 //     appearance outside CTAs.
 
-import Image from "next/image";
 import Link from "next/link";
+import { SmartImage } from "@/components/smart-image";
 import { GlowingEffect } from "@/components/glowing-effect";
 
 export function HeroNav() {
@@ -29,11 +29,12 @@ export function HeroNav() {
         />
         <div className="relative max-w-7xl mx-auto px-6 py-4 flex items-center">
           <Link href="/" className="relative z-10 flex items-center gap-3 no-underline shrink-0">
-            <Image
+            <SmartImage
               src="/logo.png"
               alt="Arysn logo"
               width={26}
               height={26}
+              sizes="26px"
               className="shrink-0"
               style={{ mixBlendMode: "screen" }}
               priority

@@ -1,7 +1,7 @@
 import { VSLPlayer } from "@/components/vsl-player";
 import { BurgundyGlow } from "@/components/burgundy-glow";
 import { CTAButton } from "@/components/cta-button";
-import { BeamsBackground } from "@/components/beams-background";
+import { BeamsBackground } from "@/components/beams-background-dynamic";
 
 export function VSLHero() {
   return (

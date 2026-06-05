@@ -7,5 +7,13 @@ export const metadata: Metadata = {
 };
 
 export default function VSLLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return (
+    <>
+      {/* Warm the connection to Cal.com so the deferred booking embed loads fast
+          once the user reaches the bottom fold. */}
+      <link rel="preconnect" href="https://app.cal.com" />
+      <link rel="dns-prefetch" href="https://app.cal.com" />
+      {children}
+    </>
+  );
 }

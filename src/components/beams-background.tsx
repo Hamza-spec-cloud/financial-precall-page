@@ -232,7 +232,9 @@ class ShaderMount {
   }
 
   handleResize() {
-    const dpr = window.devicePixelRatio || 1;
+    // Cap DPR: the fragment shader cost scales with pixel count, and at 3× (mobile)
+    // that is 9× the work for a soft mist that is visually identical at ~1.5×.
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     const w = this.canvas.clientWidth * dpr;
     const h = this.canvas.clientHeight * dpr;
     if (this.canvas.width !== w || this.canvas.height !== h) {
@@ -254,7 +256,7 @@ class ShaderMount {
     this.gl.uniform1f(this.uniformLocations.u_time as WebGLUniformLocation, this.totalAnimationTime * 0.001);
     if (this.resolutionChanged) {
       this.gl.uniform2f(this.uniformLocations.u_resolution as WebGLUniformLocation, this.gl.canvas.width, this.gl.canvas.height);
-      this.gl.uniform1f(this.uniformLocations.u_pixelRatio as WebGLUniformLocation, window.devicePixelRatio || 1);
+      this.gl.uniform1f(this.uniformLocations.u_pixelRatio as WebGLUniformLocation, Math.min(window.devicePixelRatio || 1, 1.5));
       this.resolutionChanged = false;
     }
     this.updateProvidedUniforms();

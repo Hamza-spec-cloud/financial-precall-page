@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
+    "prebuild": "node scripts/generate-blur.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "blur": "node scripts/generate-blur.mjs"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.7",
@@ -23,6 +25,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4.0.0",
     "typescript": "^5"
   }

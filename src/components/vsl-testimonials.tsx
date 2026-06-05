@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SmartImage } from "@/components/smart-image";
 import { BurgundyGlow } from "@/components/burgundy-glow";
 import { GlowingEffect } from "@/components/glowing-effect";
 
@@ -94,11 +94,12 @@ function TestimonialCard({ data }: { data: CaseStudy }) {
       )}
 
       <div className="flex items-center justify-center" style={{ height: data.logoHeight }}>
-        <Image
+        <SmartImage
           src={data.logoSrc}
           alt={data.logoAlt}
           width={data.logoWidth}
           height={data.logoHeight}
+          sizes="(max-width: 1024px) 60vw, 480px"
           style={{
             mixBlendMode: "screen",
             objectFit: "contain",
@@ -123,21 +124,23 @@ function TestimonialCard({ data }: { data: CaseStudy }) {
             <div className="w-full flex flex-col gap-[11px]">
               <div className="w-full flex flex-row gap-[11px]">
                 <div className="flex-1 min-w-0 border border-white/[0.06] overflow-hidden">
-                  <Image
+                  <SmartImage
                     src={first.src}
                     alt={first.alt}
                     width={first.width}
                     height={first.height}
+                    sizes="(max-width: 1024px) 45vw, 50vw"
                     className="w-full h-auto"
                     style={{ display: "block" }}
                   />
                 </div>
                 <div className="flex-1 min-w-0 border border-white/[0.06] overflow-hidden">
-                  <Image
+                  <SmartImage
                     src={second.src}
                     alt={second.alt}
                     width={second.width}
                     height={second.height}
+                    sizes="(max-width: 1024px) 45vw, 50vw"
                     className="w-full h-auto"
                     style={{ display: "block" }}
                   />
@@ -147,11 +150,12 @@ function TestimonialCard({ data }: { data: CaseStudy }) {
                 className="border border-white/[0.06] overflow-hidden mx-auto"
                 style={{ width: "calc(50% - 6px)" }}
               >
-                <Image
+                <SmartImage
                   src={third.src}
                   alt={third.alt}
                   width={third.width}
                   height={third.height}
+                  sizes="(max-width: 1024px) 45vw, 50vw"
                   className="w-full h-auto"
                   style={{ display: "block" }}
                 />
@@ -167,11 +171,12 @@ function TestimonialCard({ data }: { data: CaseStudy }) {
               className="flex-1 min-w-0 overflow-hidden border border-white/[0.06]"
               style={{ height: 144 }}
             >
-              <Image
+              <SmartImage
                 src={s.src}
                 alt={s.alt}
                 width={s.width}
                 height={s.height}
+                sizes="(max-width: 1024px) 45vw, 22vw"
                 className="w-full h-full"
                 style={{ display: "block", objectFit: "cover" }}
               />
@@ -181,12 +186,13 @@ function TestimonialCard({ data }: { data: CaseStudy }) {
       ) : (
         <div className="w-full flex flex-col gap-[14px]">
           {data.screenshots.map((s) => (
-            <Image
+            <SmartImage
               key={s.src}
               src={s.src}
               alt={s.alt}
               width={s.width}
               height={s.height}
+              sizes="(max-width: 1024px) 90vw, 45vw"
               className="w-full h-auto border border-white/[0.06]"
               style={{ display: "block" }}
             />
