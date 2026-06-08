@@ -9,10 +9,25 @@ const inter = Inter({
   display: "swap",
 });
 
+// Preview text mirrors the hero headline + subheadline so the browser tab, search
+// snippet, and link-share cards all read the same promise.
+const PAGE_TITLE =
+  "We Put 3 Signed Advisory Clients On Your Books Every 90 Days… Or You Don’t Pay";
+const PAGE_DESCRIPTION =
+  "We rebuild the single thing that decides whether a stranger ever becomes a client. Then we build the demand system around it. Either it puts ready-to-sign advisory retainers on your calendar every 90 days, or you pay nothing.";
+
 export const metadata: Metadata = {
-  title: "Add 3 Premium Advisory Clients This Quarter — Arysn",
-  description:
-    "How to add 3 premium advisory clients ($45k/mo) this quarter — without chasing referrals, building complicated funnels, or taking a single sales call.",
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
+  openGraph: {
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+  },
 };
 
 export default function VSLRootLayout({ children }: { children: React.ReactNode }) {

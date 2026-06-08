@@ -63,10 +63,20 @@ export function VturbPlayer() {
         inactiveZone={0}
         movementDuration={1.5}
       />
-      {createElement("vturb-smartplayer", {
-        id: PLAYER_ID,
-        style: { display: "block", margin: "0 auto", width: "100%" },
-      })}
+      {/* Reserve the 16:9 video footprint from the first paint so the player mounting
+          never pushes the hero CTA down (CLS). Mirrors the (home) vsl-player pattern. */}
+      <div className="relative aspect-video bg-[#0d0d0d] overflow-hidden">
+        {createElement("vturb-smartplayer", {
+          id: PLAYER_ID,
+          style: {
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            display: "block",
+          },
+        })}
+      </div>
     </div>
   );
 }
