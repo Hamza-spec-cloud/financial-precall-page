@@ -94,7 +94,9 @@ export function CalEmbed() {
         elementOrSelector: "#my-cal-inline-constraint-review",
         config: {
           layout: "month_view",
-          useSlotsViewOnSmallScreen: "true",
+          // Boolean (not the string "true") so Cal reliably renders the compact,
+          // phone-friendly slots view on small screens instead of a squeezed month grid.
+          useSlotsViewOnSmallScreen: true,
           theme: "auto",
         },
         calLink: "ryan-el-ghoul-houo4g/constraint-review",

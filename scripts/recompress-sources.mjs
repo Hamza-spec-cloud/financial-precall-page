@@ -37,6 +37,18 @@ const RULES = [
 const RASTER = new Set([".png", ".jpg", ".jpeg"]);
 const SIZE_FLOOR = 60 * 1024; // don't bother re-encoding files already under 60KB
 
+// Carousel logos kept at original high resolution on purpose: palette/256-color
+// re-encoding visibly banded them under the marquee's mix-blend-mode:screen. The
+// Next.js optimizer still downscales them to tiny AVIF at render size, so excluding
+// them from recompression costs nothing in delivered bytes. Never re-encode these.
+const EXCLUDE = new Set([
+  "vsl/marquee/10ft-studio.png",
+  "vsl/marquee/diamond-institute.png",
+  "vsl/marquee/byeb.png",
+  "vsl/marquee/commission-club.png",
+  "vsl/testimonials/galriv-logo.png",
+]);
+
 function extOf(name) {
   const dot = name.lastIndexOf(".");
   return dot === -1 ? "" : name.slice(dot).toLowerCase();
@@ -87,6 +99,7 @@ async function main() {
 
   for await (const file of walk(PUBLIC_DIR)) {
     const relPath = relative(PUBLIC_DIR, file).split(sep).join("/");
+    if (EXCLUDE.has(relPath)) continue;
     const rule = ruleFor(relPath);
     if (!rule) continue;
 
