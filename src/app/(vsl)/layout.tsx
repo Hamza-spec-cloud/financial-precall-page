@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 const inter = Inter({
@@ -61,7 +62,10 @@ export default function VSLRootLayout({ children }: { children: React.ReactNode 
         <link rel="preconnect" href="https://app.cal.com" />
         <link rel="dns-prefetch" href="https://app.cal.com" />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <SpeedInsights />
+      </body>
     </html>
   );
 }
