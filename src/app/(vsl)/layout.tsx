@@ -45,9 +45,14 @@ export default function VSLRootLayout({ children }: { children: React.ReactNode 
           crossOrigin="anonymous"
         />
 
-        {/* Resolve VTurb hostnames ahead of first byte. */}
-        <link rel="dns-prefetch" href="https://cdn.converteai.net" />
+        {/* Fully warm (DNS + TCP + TLS) the two VTurb hosts that serve bytes on the
+            critical path — the player/runtime scripts and the HLS segments — so the
+            first request skips the handshake. dns-prefetch kept as a fallback for
+            browsers that ignore crossorigin preconnect. */}
+        <link rel="preconnect" href="https://scripts.converteai.net" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdn.converteai.net" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://scripts.converteai.net" />
+        <link rel="dns-prefetch" href="https://cdn.converteai.net" />
         <link rel="dns-prefetch" href="https://images.converteai.net" />
         <link rel="dns-prefetch" href="https://license.vturb.com" />
 

@@ -14,6 +14,7 @@ import FloatingParticlesBackground from "../_lib/floating-particles-background.j
 export function Starfield() {
   const [opacity, setOpacity] = useState(0);
   const [hidden, setHidden] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
 
   useEffect(() => {
     function update() {
@@ -39,9 +40,20 @@ export function Starfield() {
     };
   }, []);
 
+  // Respect the OS "reduce motion" preference — drop the particle RAF loop entirely
+  // for those users (the mist shader is intentionally left untouched).
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const apply = () => setReduceMotion(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
   // The field is fully transparent across the hero + marquee — no reason to burn a
-  // RAF loop on particle physics no one can see. Pause when invisible or backgrounded.
-  const paused = opacity === 0 || hidden;
+  // RAF loop on particle physics no one can see. Pause when invisible or backgrounded,
+  // and never run it for reduced-motion users.
+  const paused = opacity === 0 || hidden || reduceMotion;
 
   return (
     <div
@@ -52,19 +64,22 @@ export function Starfield() {
         pointerEvents: "none",
         zIndex: 0,
         overflow: "hidden",
-        opacity,
+        opacity: reduceMotion ? 0 : opacity,
         transition: "opacity 200ms linear",
       }}
     >
+      {/* Very faint, small dust — quiet depth behind the content rather than a visible
+          starfield. Lower opacity + glow is both the look and the per-frame cost win
+          (canvas shadowBlur scales with glowIntensity). */}
       <FloatingParticlesBackground
-        particleCount={45}
-        particleSize={0.25}
-        particleOpacity={0.5}
-        glowIntensity={4}
-        movementSpeed={0.5}
+        particleCount={36}
+        particleSize={0.2}
+        particleOpacity={0.16}
+        glowIntensity={2}
+        movementSpeed={0.35}
         mouseInfluence={140}
         mouseGravity="attract"
-        gravityStrength={50}
+        gravityStrength={35}
         backgroundColor="transparent"
         particleColor="#e0e0e0"
         paused={paused}

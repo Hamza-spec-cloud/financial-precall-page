@@ -2,5 +2,5 @@
 // Regenerate with `npm run blur` (runs automatically on `prebuild`).
 
 export const BLUR_DATA: Record<string, string> = {
-  "/home/logo.png": "data:image/webp;base64,UklGRi4BAABXRUJQVlA4WAoAAAAQAAAADgAADwAAQUxQSJ8AAAABgJtt27HnfvGbA7jz/0cz2NYETlrb7tK5tLVCSrdOm5T+/H0rRMQEQNPKoJeiLQxKtExY2QKBklDGGSofi+CzQ514k/0P11dWwOSN1E2cvgnCr9AFZqk8+BCEf+Hz7ksoBSNWWzC3c6YpZ0fYXItCnaNb+IsvLQMglHELRoRLwM2gyjEg1INBk2Ps3QFCdEzPgkGbojkDRAeBj8MgUQEAVlA4IGgAAABQAgCdASoPABAAA4BaJYwCdAYrF8ALWVnzwsAA4BigOlruFh/qftbhFfNYMSWiWNQU3FoGjxN97b63SOmv+j9FEeXXqQV1W0i3+llOoTv8oIeWfuj6Ansz8odL/xPtlJmT4sMsqt8AAA==",
+  "/home/logo.png": "data:image/webp;base64,UklGRiYBAABXRUJQVlA4WAoAAAAQAAAADgAADwAAQUxQSJ4AAAABgJtt27HnevFbQevKXCFt0hkTWKVtJwM4nY0BssBfpbXZ/vYKETEBRBcmSbyS5iykjKXZ2EMRKaRSBmpfKsi2EDO1sPfOfWtBGuwFVeM3996AJ9CFMtXufwX8/sC/2xOoRCGTMst7lprKTgLruzlE1/QFPAUra4CQSpsZC1wiXIqomqFADYqYmsk3M0LEMTuHIraitQwRhyDNSIIiClZQOCBiAAAA0AEAnQEqDwAQAAOAWiWMAnR/AIJQlQAA4BigeltWOD05aq/kOmrij7x0kaJnu5ACdDcbLlKg3x63SWrP/+NbyL4xYi9r3bQC+tE8azpdgsYRDoCiPe2Fc/Qvt4Q8hCq7QAA=",
 };

@@ -5,7 +5,7 @@
 // renders into our container.
 
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type CalFn = ((...args: unknown[]) => void) & {
   loaded?: boolean;
@@ -70,6 +70,7 @@ function bootstrap() {
 
 export function CalEmbed() {
   const ref = useRef<HTMLDivElement>(null);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -107,8 +108,13 @@ export function CalEmbed() {
         hideEventTypeDetails: false,
         layout: "month_view",
       });
+
+      // Fade the skeleton out once the embed has had a moment to paint its iframe,
+      // so the handoff from placeholder to live calendar is seamless.
+      window.setTimeout(() => setReady(true), 1200);
     };
 
+    // Primary trigger: render the moment the fold approaches the viewport.
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -120,14 +126,49 @@ export function CalEmbed() {
     );
     io.observe(el);
 
-    return () => io.disconnect();
+    // Fallback warm-up: on a calm/idle main thread, render the calendar ahead of time
+    // so it is already live before the user ever scrolls down. Never competes with the
+    // critical VSL load (only fires once the thread is idle); init() is guarded so this
+    // and the observer can't double-init. typeof guard keeps a real fallback for
+    // browsers without requestIdleCallback (older Safari).
+    const hasIdle = typeof window.requestIdleCallback === "function";
+    const idleHandle = hasIdle
+      ? window.requestIdleCallback(() => init(), { timeout: 4000 })
+      : window.setTimeout(init, 2500);
+
+    return () => {
+      io.disconnect();
+      if (hasIdle) window.cancelIdleCallback(idleHandle as number);
+      else window.clearTimeout(idleHandle as number);
+    };
   }, []);
 
   return (
-    <div
-      ref={ref}
-      id="my-cal-inline-constraint-review"
-      style={{ width: "100%", height: "100%", overflow: "scroll" }}
-    />
+    <div className="relative w-full h-full">
+      {/* Branded skeleton — shown until the Cal iframe paints, so the booking box is
+          never an empty void. On-brand tracked label (matches the section eyebrow), no
+          border-radius so it survives the global `* { border-radius:0 }` rule.
+          Pointer-events off so it never blocks the live embed. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 flex items-center justify-center transition-opacity duration-500"
+        style={{ opacity: ready ? 0 : 1, background: "#0d0d0d" }}
+      >
+        <span
+          className="text-[11px] font-light tracking-[0.25em] text-[#555555] uppercase"
+          style={{ animation: "cal-skeleton-pulse 1.6s ease-in-out infinite" }}
+        >
+          Preparing Calendar
+        </span>
+        <style>{`@keyframes cal-skeleton-pulse { 0%,100% { opacity: 0.35 } 50% { opacity: 0.8 } }`}</style>
+      </div>
+
+      <div
+        ref={ref}
+        id="my-cal-inline-constraint-review"
+        className="relative"
+        style={{ width: "100%", height: "100%", overflow: "scroll" }}
+      />
+    </div>
   );
 }
