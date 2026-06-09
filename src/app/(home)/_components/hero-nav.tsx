@@ -12,7 +12,8 @@
 //     Do NOT "normalize" this back to burgundy — it is the sole authorized amber
 //     appearance outside CTAs.
 
-import Link from "next/link";
+"use client";
+
 import { SmartImage } from "./smart-image";
 import { GlowingEffect } from "./glowing-effect";
 
@@ -47,7 +48,10 @@ export function HeroNav() {
           </span>
         </div>
         <div className="relative max-w-7xl mx-auto px-6 py-4 flex items-center">
-          <Link href="/" className="relative z-10 flex items-center gap-3 no-underline shrink-0">
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="relative z-10 flex items-center gap-3 no-underline shrink-0 bg-transparent border-0 p-0 cursor-pointer"
+          >
             <SmartImage
               src="/home/logo.png"
               alt="Arysn logo"
@@ -61,7 +65,7 @@ export function HeroNav() {
             <span className="text-sm font-light tracking-[0.25em] text-[#e0e0e0] uppercase">
               Arysn
             </span>
-          </Link>
+          </button>
         </div>
       </div>
     </header>
